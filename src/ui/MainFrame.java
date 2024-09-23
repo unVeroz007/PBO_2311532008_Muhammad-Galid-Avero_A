@@ -108,4 +108,5 @@ public class MainFrame extends JFrame {
 		btnNewButton.setBounds(61, 427, 781, 61);
 		contentPane.add(btnNewButton);
 	}
+	
 }

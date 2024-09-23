@@ -90,7 +90,7 @@ public class LoginFrame extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			if(User.login(txtUsername.getText(), txtPassword.getText())) {
-//				JOptionPane.showMessageDialog(null, "Selamat Berkelana");
+				JOptionPane.showMessageDialog(null, "Selamat Berkelana");
 				//Cara 1
 				MainFrame Frame = new MainFrame();
 				Frame.setVisible(true);
