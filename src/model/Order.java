@@ -3,6 +3,9 @@ package model;
 public class Order {
 	
 	String id, id_customer, id_service, id_user, total, tanggal, tanggal_selesai, status_pembayaran;
+	
+	public void save(String string) {
+	}
 
 	public String getId() {
 		return id;

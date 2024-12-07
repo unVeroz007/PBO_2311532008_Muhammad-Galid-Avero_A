@@ -4,6 +4,8 @@ public class OrderDetail {
 	String id_order, id_service;
 	int id_order_detail, jumlah, total;
 	
+	public Object save;
+
 	public String getId_order() {
 		return id_order;
 	}
@@ -33,6 +35,9 @@ public class OrderDetail {
 	}
 	public void setTotal(int total) {
 		this.total = total;
+	}
+	
+	public void save(String string, String string2) {
 	}
 
 }

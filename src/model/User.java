@@ -3,6 +3,9 @@ package model;
 public class User {
 	String id, nama,username, password;
 	
+    public User() {
+    }
+	
 	public User(String uname, String pass) {
 		this.username = uname;
 		this.password = pass;
