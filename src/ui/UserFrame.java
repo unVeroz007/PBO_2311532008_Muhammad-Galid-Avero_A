@@ -193,7 +193,9 @@ public class UserFrame extends JFrame {
 		btnCancel.setBackground(Color.YELLOW);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				MainFrame Frame = new MainFrame();
+				Frame.setVisible(true);
+				dispose();
 			}
 		});
 		btnCancel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
