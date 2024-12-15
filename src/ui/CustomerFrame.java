@@ -47,8 +47,8 @@ public class CustomerFrame extends JFrame {
 			public void run() {
 				try {
 					CustomerFrame frame = new CustomerFrame();
-					frame.setVisible(true);
 					frame.loadTable();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -148,15 +148,22 @@ public class CustomerFrame extends JFrame {
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		    	Customer customer = new CustomerBuilder()
+		    	if(id != null) {
+				Customer customer = new CustomerBuilder()
 		    	.setName(txtName.getText())
 		    	.setAddres(txtAddres.getText())
 		    	.setHandphone(txtHP.getText())
 		    	.setId(id)
 		    	.build();
+		    	
 		    	ctm.update(customer);
 		    	reset();
 		    	loadTable();
+		    	JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
+			}else {
+		    	JOptionPane.showMessageDialog(null, "Pilih Data yang akan diperbarui");
+
+			}
 			}
 		});
 		btnUpdate.setForeground(Color.BLACK);
@@ -167,16 +174,36 @@ public class CustomerFrame extends JFrame {
 		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(id != null) {
-					ctm.delete(id);
-					reset();
-					loadTable();
-				}else {
-					JOptionPane.showMessageDialog(null, "Silahkan pilih data yang akan dihapus");
-				}
-			}
+		    public void actionPerformed(ActionEvent e) {
+		        if (id != null && !id.isEmpty()) {
+		            try {
+		            	JOptionPane.showMessageDialog(null, "YAKIN INGIN MENGHAPUS","KONFIRM", JOptionPane.YES_NO_OPTION);
+
+		                Customer customer = new CustomerBuilder()
+		                    .setId(id)
+		                    .build();
+
+		                CustomerRepo customerRepo = new CustomerRepo();
+		                customerRepo.delete(customer.getId());
+
+		                reset();
+		                loadTable();
+
+		                // Pesan konfirmasi
+		                JOptionPane.showMessageDialog(null, "Customer berhasil dihapus.");
+		            } catch (Exception ex) {
+		                // Tangkap error
+		                JOptionPane.showMessageDialog(null, "Terjadi kesalahan: " + ex.getMessage());
+		                ex.printStackTrace();
+		            }
+		        } else {
+		            // Pesan jika ID tidak valid
+		            JOptionPane.showMessageDialog(null, "Silahkan pilih data yang akan dihapus.");
+		        }
+		    }
 		});
+
+
 		btnDelete.setForeground(Color.BLACK);
 		btnDelete.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		btnDelete.setBackground(Color.RED);
@@ -205,8 +232,8 @@ public class CustomerFrame extends JFrame {
 	protected void loadTable() {
 		ls = ctm.show();
 		TableCustomer tu = new TableCustomer(ls);
-		table.setModel(tu);
 		table.getTableHeader().setVisible(true);		
+		table.setModel(tu);
 	}
 
 	protected void reset() {

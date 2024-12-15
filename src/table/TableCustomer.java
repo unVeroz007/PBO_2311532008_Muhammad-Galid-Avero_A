@@ -42,6 +42,7 @@ public class TableCustomer extends AbstractTableModel {
 		case 3:
 			return ls.get(rowIndex).getHandphone();
 		default:
-			return null;	}
+			return null;	
+			}
 	}
 }
