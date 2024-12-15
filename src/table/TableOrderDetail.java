@@ -9,7 +9,7 @@ import model.OrderDetail;
 
 public class TableOrderDetail extends AbstractTableModel {
 	List<OrderDetail> ls;
-	private String[] columnNames = {"id_order_detail", "id_order", "id_service", "jumlah", "total"};
+	private String[] columnNames = {"id_order_detail", "id_order", "id_service", "jumlah", "harga", "total"};
 	public TableOrderDetail(List<OrderDetail> ls) {
 		this.ls = ls; 
 	}
@@ -21,7 +21,7 @@ public class TableOrderDetail extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		// TODO Auto-generated method stub
-		return 5;
+		return 6;
 	}
 	
 	@Override
@@ -32,19 +32,23 @@ public class TableOrderDetail extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		switch (columnIndex) {
-		// TODO Auto-generated method stub
-		case 0:
-			return ls.get(rowIndex).getId_order();
-		case 1:
-			return ls.get(rowIndex).getId_service();
-		case 2:
-			return ls.get(rowIndex).getId_order_detail();
-		case 3:
-			return ls.get(rowIndex).getJumlah();
-		case 4:
-			return ls.get(rowIndex).getTotal();
-		default:
-			return null;	}
+	    OrderDetail orderDetail = ls.get(rowIndex); 
+	    switch (columnIndex) {
+	        case 0: 
+	            return orderDetail.getId_order_detail(); 
+	        case 1: 
+	            return orderDetail.getId_order(); 
+	        case 2: 
+	            return orderDetail.getId_service(); 
+	        case 3: 
+	            return orderDetail.getJumlah(); 
+	        case 4: 
+	        	return orderDetail.getHarga(); 
+	        case 5: 
+	            return orderDetail.getTotal(); 
+	        default:
+	            return null; 
+	    }
 	}
+
 }

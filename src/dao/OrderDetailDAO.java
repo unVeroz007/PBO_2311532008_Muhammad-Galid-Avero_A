@@ -5,7 +5,8 @@ import model.OrderDetail;
 
 public interface OrderDetailDAO {
     void save(OrderDetail orderDetail);            
-    List<OrderDetail> show();                      
-    void delete(String id);                        
-    void update(OrderDetail orderDetail);          
+    public List<OrderDetail> show(String id_order);                      
+    public void delete(String id);                        
+    public void update(OrderDetail orderDetail);
+    public String total(String id_order);
 }

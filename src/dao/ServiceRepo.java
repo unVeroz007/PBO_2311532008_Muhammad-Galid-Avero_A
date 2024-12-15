@@ -17,33 +17,34 @@ import model.Service;
 
 public  class ServiceRepo implements ServiceDAO {
 		private Connection connection;
-		final String insert = "INSERT INTO service (id, jenis, harga, status) VALUES (?,?,?,?);";
+		final String insert = "INSERT INTO service (jenis, harga, status) VALUES (?,?,?);";
 		final String select = "SELECT * FROM service;";
 		final String delete = "DELETE FROM service WHERE id=?;";
 		final String update = "UPDATE service SET jenis=?, harga=?, status=? WHERE id=?;";
 		
-//		public ServiceRepo() {
-//			connection = Database.koneksi();
-//		}
+		public ServiceRepo() {
+			connection = Database.koneksi();
+		}
 
 		@Override
 		public void save(Service service) {
 			PreparedStatement st = null;
 			try {
 				st = connection.prepareStatement(insert);
-				st.setString(1, service.getId());
-				st.setString(2, service.getJenis());
-				st.setString(3, service.getHarga());
-				st.setString(4, service.getStatus());
+				st.setString(1, service.getJenis());
+				st.setString(2, service.getHarga());
+				st.setString(3, service.getStatus());
 				st.executeUpdate();
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}finally {
+				if (st != null) {
 				try {
 					st.close();
 				}catch(SQLException e) {
 					e.printStackTrace();
 				}
+			}
 			}
 
 			
@@ -63,7 +64,6 @@ public  class ServiceRepo implements ServiceDAO {
 		            ls.add(service);
 		        }
 		    } catch (SQLException e) {
-//		        Logger.getLogger(ServiceDAO.class.getJenis()).log(Level.SEVERE, null, e);
 		    	Logger.getLogger(ServiceRepo.class.getName()).log(Level.SEVERE, null, e);
 
 		    } 
@@ -96,8 +96,8 @@ public  class ServiceRepo implements ServiceDAO {
 			PreparedStatement st = null;
 			try {
 				st = connection.prepareStatement(update);
-				st.setString(1, service.getHarga());
-				st.setString(2, service.getJenis());
+				st.setString(1, service.getJenis());
+				st.setString(2, service.getHarga());
 				st.setString(3, service.getStatus());
 				st.setString(4, service.getId());
 				st.executeUpdate();

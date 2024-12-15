@@ -1,8 +1,7 @@
 package model;
 
 public class Order {
-	
-	String id, id_customer, id_service, id_user, total, tanggal, tanggal_selesai, status_pembayaran;
+	String id, id_pelanggan, tanggal, tanggal_pengambilan, status, pembayaran, status_pembayaran, total;
 
 	public String getId() {
 		return id;
@@ -12,36 +11,12 @@ public class Order {
 		this.id = id;
 	}
 
-	public String getId_customer() {
-		return id_customer;
+	public String getId_pelanggan() {
+		return id_pelanggan;
 	}
 
-	public void setId_customer(String id_customer) {
-		this.id_customer = id_customer;
-	}
-
-	public String getId_service() {
-		return id_service;
-	}
-
-	public void setId_service(String id_service) {
-		this.id_service = id_service;
-	}
-
-	public String getId_user() {
-		return id_user;
-	}
-
-	public void setId_user(String id_user) {
-		this.id_user = id_user;
-	}
-
-	public String getTotal() {
-		return total;
-	}
-
-	public void setTotal(String total) {
-		this.total = total;
+	public void setId_pelanggan(String id_pelanggan) {
+		this.id_pelanggan = id_pelanggan;
 	}
 
 	public String getTanggal() {
@@ -52,12 +27,28 @@ public class Order {
 		this.tanggal = tanggal;
 	}
 
-	public String getTanggal_selesai() {
-		return tanggal_selesai;
+	public String getTanggal_pengambilan() {
+		return tanggal_pengambilan;
 	}
 
-	public void setTanggal_selesai(String tanggal_selesai) {
-		this.tanggal_selesai = tanggal_selesai;
+	public void setTanggal_pengambilan(String tanggal_pengambilan) {
+		this.tanggal_pengambilan = tanggal_pengambilan;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getPembayaran() {
+		return pembayaran;
+	}
+
+	public void setPembayaran(String pembayaran) {
+		this.pembayaran = pembayaran;
 	}
 
 	public String getStatus_pembayaran() {
@@ -66,6 +57,14 @@ public class Order {
 
 	public void setStatus_pembayaran(String status_pembayaran) {
 		this.status_pembayaran = status_pembayaran;
+	}
+
+	public String getTotal() {
+		return total;
+	}
+
+	public void setTotal(String total) {
+		this.total = total;
 	}
 
 }

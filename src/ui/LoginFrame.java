@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.BorderLayout;
-import error.ValidationException;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -9,9 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import model.User;
-import service.LoginService;
-import util.ValidationUtil;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -24,8 +20,6 @@ import java.awt.event.ActionEvent;
 public class LoginFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	protected static final int ValidationException = 0;
-	protected static final int NullPointerException = 0;
 	private JPanel contentPane;
 	private JTextField txtUsername;
 	private JTextField txtPassword;
@@ -94,31 +88,21 @@ public class LoginFrame extends JFrame {
 		
 		JButton btnNewButton = new JButton("LOGIN");
 		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {		
-				String userValue = txtUsername.getText();
-				String passValue = txtPassword.getText();
+			public void actionPerformed(ActionEvent e) {
+			if(User.login(txtUsername.getText(), txtPassword.getText())) {
+				JOptionPane.showMessageDialog(null, "Selamat Berkelana");
+				//Cara 1
+				MainFrame Frame = new MainFrame();
+				Frame.setVisible(true);
+				dispose();
 				
-				//create user object
-				User user = new User(userValue, passValue);
-				
-				try {
-					ValidationUtil.validate(user);
-					LoginService loginService = new LoginService();
-					if(loginService.authenticate(user)) {
-						System.out.println("Login Succesful!");
-						new MainFrame().setVisible(true);
-						dispose();
-					}
-					else {
-						System.out.println("Invalid username or password");
-						JOptionPane.showMessageDialog(null, "Login gagal, invalid username or password");
-					}
-				}catch(ValidationException | NullPointerException exception) {
-						System.out.println("Data tidak valid : " + exception.getMessage());
-						JOptionPane.showMessageDialog(null, "Login gagal " + exception.getMessage());
-				}	finally {
-						System.out.println("Selalu di eksekusi");
-				}					
+				//cara 2
+				new MainFrame().setVisible(true);
+				dispose();
+			}else {
+				JOptionPane.showMessageDialog(null, "NT Brodi");
+			}
+			
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 20));

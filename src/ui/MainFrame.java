@@ -67,30 +67,60 @@ public class MainFrame extends JFrame {
 		contentPane.add(lblmotto);
 		
 		JButton btnTransaction = new JButton("Transaction");
+		btnTransaction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnTransaction.setForeground(new Color(0, 128, 255));
 		btnTransaction.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
 		btnTransaction.setBounds(61, 140, 226, 112);
 		contentPane.add(btnTransaction);
 		
 		JButton btnService = new JButton("Service");
+		btnService.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ServiceFrame Frame = new ServiceFrame();
+				Frame.setVisible(true);
+//				dispose();
+			}
+		});
 		btnService.setForeground(new Color(0, 128, 255));
 		btnService.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
 		btnService.setBounds(339, 140, 226, 112);
 		contentPane.add(btnService);
 		
 		JButton btnCustomer = new JButton("Customer");
+		btnCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CustomerFrame Frame = new CustomerFrame();
+				Frame.setVisible(true);
+//				dispose();
+			}
+		});
 		btnCustomer.setForeground(new Color(0, 128, 255));
 		btnCustomer.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
 		btnCustomer.setBounds(614, 140, 226, 112);
 		contentPane.add(btnCustomer);
 		
 		JButton btnUser = new JButton("User");
+		btnUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserFrame Frame = new UserFrame();
+				Frame.setVisible(true);
+//				dispose();
+			}
+		});
 		btnUser.setForeground(new Color(0, 128, 255));
 		btnUser.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
 		btnUser.setBounds(61, 278, 226, 112);
 		contentPane.add(btnUser);
 		
 		JButton btnReport = new JButton("Report");
+		btnReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnReport.setForeground(new Color(0, 128, 255));
 		btnReport.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
 		btnReport.setBounds(339, 278, 226, 112);
@@ -103,6 +133,13 @@ public class MainFrame extends JFrame {
 		contentPane.add(btnProfile);
 		
 		JButton btnNewButton = new JButton("LOGOUT");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginFrame Frame = new LoginFrame();
+				Frame.setVisible(true);
+				dispose();
+			}
+		});
 		btnNewButton.setForeground(new Color(255, 0, 0));
 		btnNewButton.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
 		btnNewButton.setBounds(61, 427, 781, 61);

@@ -27,12 +27,12 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JScrollPane;
 
 public class CustomerFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtID;
 	private JTextField txtName;
 	private JTextField txtAddres;
 	private JTextField txtHP;
@@ -47,6 +47,7 @@ public class CustomerFrame extends JFrame {
 				try {
 					CustomerFrame frame = new CustomerFrame();
 					frame.setVisible(true);
+					frame.loadTable();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -69,15 +70,8 @@ public class CustomerFrame extends JFrame {
 		JLabel lblNewLabel = new JLabel("CUSTOMER");
 		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 28));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(170, 0, 265, 52);
+		lblNewLabel.setBounds(180, 20, 265, 52);
 		contentPane.add(lblNewLabel);
-		
-		JLabel lblID = new JLabel("ID                 :");
-		lblID.setBackground(new Color(240, 240, 240));
-		lblID.setForeground(new Color(0, 0, 0));
-		lblID.setFont(new Font("Tempus Sans ITC", Font.BOLD, 22));
-		lblID.setBounds(36, 40, 165, 41);
-		contentPane.add(lblID);
 		
 		JLabel lblName = new JLabel("Name           :");
 		lblName.setHorizontalAlignment(SwingConstants.LEFT);
@@ -97,11 +91,6 @@ public class CustomerFrame extends JFrame {
 		lblHp.setBounds(36, 162, 165, 41);
 		contentPane.add(lblHp);
 		
-		txtID = new JTextField();
-		txtID.setBounds(180, 47, 427, 33);
-		contentPane.add(txtID);
-		txtID.setColumns(10);
-		
 		txtName = new JTextField();
 		txtName.setColumns(10);
 		txtName.setBounds(180, 86, 427, 33);
@@ -117,7 +106,13 @@ public class CustomerFrame extends JFrame {
 		txtHP.setBounds(180, 169, 427, 33);
 		contentPane.add(txtHP);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setToolTipText("ID\r\nNama\r\nAlamat\r\nNo Handphohe");
+		scrollPane.setBounds(10, 264, 624, 250);
+		contentPane.add(scrollPane);
+		
 		table = new JTable();
+		scrollPane.setViewportView(table);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -128,14 +123,11 @@ public class CustomerFrame extends JFrame {
 				
 			}
 		});
-		table.setBounds(10, 264, 624, 250);
-		contentPane.add(table);
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Customer customer = new Customer();
-				customer.setId(txtID.getText());
 				customer.setName(txtName.getText());
 				customer.setAddres(txtAddres.getText());
 				customer.setHandphone(txtHP.getText());
@@ -157,7 +149,7 @@ public class CustomerFrame extends JFrame {
 		    	customer.setName(txtName.getText());
 		    	customer.setAddres(txtAddres.getText());
 		    	customer.setHandphone(txtHP.getText());
-		    	customer.setId(txtID.getText());
+//		    	customer.setId(txtID.getText());
 		    	customer.setId(id);
 		    	ctm.update(customer);
 		    	reset();
@@ -189,6 +181,13 @@ public class CustomerFrame extends JFrame {
 		contentPane.add(btnDelete);
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainFrame Frame = new MainFrame();
+				Frame.setVisible(true);
+				dispose();
+			}
+		});
 		btnCancel.setForeground(Color.BLACK);
 		btnCancel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		btnCancel.setBackground(Color.YELLOW);
@@ -208,7 +207,6 @@ public class CustomerFrame extends JFrame {
 	}
 
 	protected void reset() {
-		txtID.setText("");
 		txtName.setText("");
 		txtAddres.setText("");
 		txtHP.setText("");		

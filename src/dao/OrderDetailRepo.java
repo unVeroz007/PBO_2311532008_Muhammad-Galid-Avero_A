@@ -15,10 +15,10 @@ import model.OrderDetail;
 
 public class OrderDetailRepo implements OrderDetailDAO { 
     private Connection connection;
-    final String insert = "INSERT INTO order_detail (id_order, id_service, jumlah, total) VALUES (?,?,?,?);";
+    final String insert = "INSERT INTO order_detail (id_order, id_service, jumlah, total, harga) VALUES (?,?,?,?,?);";
     final String select = "SELECT * FROM order_detail;";
     final String delete = "DELETE FROM order_detail WHERE id_order_detail = ?;";
-    final String update = "UPDATE order_detail SET id_order=?, id_service=?, jumlah=?, total=? WHERE id_order_detail=?;";
+    final String update = "UPDATE order_detail SET id_order=?, id_service=?, jumlah=?, total=?, harga=? WHERE id_order_detail=?;";
 
     public OrderDetailRepo() {
         connection = Database.koneksi();
@@ -30,9 +30,18 @@ public class OrderDetailRepo implements OrderDetailDAO {
         try {
             st = connection.prepareStatement(insert);
             st.setString(1, orderDetail.getId_order());
-            st.setString(2, orderDetail.getId_service());  
-            st.setInt(3, orderDetail.getJumlah());
-            st.setInt(4, orderDetail.getTotal());
+            st.setString(2, orderDetail.getId_service());
+            st.setString(3, orderDetail.getJumlah());
+            st.setString(4, orderDetail.getTotal());
+			st.setString(5, orderDetail.getHarga());
+
+            // Cek jika harga kosong, berikan nilai default 0
+            String harga = orderDetail.getHarga();
+            if (harga == null || harga.trim().isEmpty()) {
+                harga = "0"; 
+            }
+            st.setString(5, harga);
+            
             st.executeUpdate();
         } catch(SQLException e) {
             e.printStackTrace();
@@ -48,34 +57,32 @@ public class OrderDetailRepo implements OrderDetailDAO {
     }
 
     @Override
-    public List<OrderDetail> show() {
+    public List<OrderDetail> show(String id_order) {
         List<OrderDetail> ls = new ArrayList<>();
-        Statement st = null;
-        ResultSet rs = null;
-        try {
-            st = connection.createStatement();
-            rs = st.executeQuery(select);
-            while(rs.next()) {
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setId_order_detail(rs.getInt("id_order_detail"));
-                orderDetail.setId_order(rs.getString("id_order"));
-                orderDetail.setId_service(rs.getString("id_service"));  
-                orderDetail.setJumlah(rs.getInt("jumlah"));
-                orderDetail.setTotal(rs.getInt("total"));
-                ls.add(orderDetail);
+        String query = "SELECT * FROM order_detail WHERE id_order = ?";
+        try (PreparedStatement st = connection.prepareStatement(query)) {
+            st.setString(1, id_order);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    OrderDetail od = new OrderDetail();
+                    od.setId_order_detail(rs.getString("id_order_detail"));
+                    od.setId_order(rs.getString("id_order"));
+                    od.setId_service(rs.getString("id_service"));
+                    od.setJumlah(rs.getString("jumlah"));
+                    od.setTotal(rs.getString("total"));
+                    od.setHarga(rs.getString("harga"));
+                    ls.add(od);
+                }
             }
-        } catch(SQLException e) {
-            Logger.getLogger(OrderDetailRepo.class.getName()).log(Level.SEVERE, null, e);
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (st != null) st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return ls;
     }
+
+
+
+
 
     @Override
     public void update(OrderDetail orderDetail) {
@@ -84,9 +91,10 @@ public class OrderDetailRepo implements OrderDetailDAO {
             st = connection.prepareStatement(update);
             st.setString(1, orderDetail.getId_order());
             st.setString(2, orderDetail.getId_service());  
-            st.setInt(3, orderDetail.getJumlah());
-            st.setInt(4, orderDetail.getTotal());
-            st.setInt(5, orderDetail.getId_order_detail());
+            st.setString(3, orderDetail.getJumlah());
+            st.setString(4, orderDetail.getTotal());
+            st.setString(5, orderDetail.getHarga());
+            st.setString(6, orderDetail.getId_order_detail());
             st.executeUpdate();
         } catch(SQLException e) {
             e.printStackTrace();
@@ -105,20 +113,48 @@ public class OrderDetailRepo implements OrderDetailDAO {
 	@Override
 	public void delete(String id) {
 		PreparedStatement st = null;
-        try {
-            st = connection.prepareStatement(delete);
-            st.setString(1, id);
-            st.executeUpdate();
-        } catch(SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch(SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+		try {
+			st = connection.prepareStatement (delete);
+			st.setString(1, id);
+			st.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				st.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			} 
+		} 
 	}
-}
+
+	@Override
+	public String total(String id_order) {
+	    String query_total = "SELECT sum(total) as total FROM order_detail WHERE id_order = ?;";
+	    PreparedStatement st = null;
+	    ResultSet rs = null;
+	    String result = "";
+	    try {
+	        st = connection.prepareStatement(query_total);
+	        st.setString(1, id_order);
+	        rs = st.executeQuery();
+	        if (rs.next()) {
+	            result = String.valueOf(rs.getDouble("total"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (st != null) st.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return result;
+	}
+
+
+
+
 }

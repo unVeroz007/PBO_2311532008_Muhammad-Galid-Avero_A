@@ -26,12 +26,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class ServiceFrame<srvc> extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtID;
 	private JTextField txtJenis;
 	private JTextField txtHarga;
 	private JTextField txtStatus;
@@ -46,6 +48,7 @@ public class ServiceFrame<srvc> extends JFrame {
 				try {
 					ServiceFrame frame = new ServiceFrame();
 					frame.setVisible(true);
+					frame.loadTable();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -68,13 +71,8 @@ public class ServiceFrame<srvc> extends JFrame {
 		JLabel lblNewLabel = new JLabel("Pilih Layanan");
 		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 25));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(167, 0, 290, 46);
+		lblNewLabel.setBounds(172, 27, 290, 46);
 		contentPane.add(lblNewLabel);
-		
-		JLabel lblID = new JLabel("ID           :");
-		lblID.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
-		lblID.setBounds(63, 54, 134, 37);
-		contentPane.add(lblID);
 		
 		JLabel lblJenis = new JLabel("Jenis       :");
 		lblJenis.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
@@ -90,12 +88,6 @@ public class ServiceFrame<srvc> extends JFrame {
 		lblStatus.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
 		lblStatus.setBounds(63, 195, 134, 37);
 		contentPane.add(lblStatus);
-		
-		txtID = new JTextField();
-		txtID.setFont(new Font("Tempus Sans ITC", Font.PLAIN, 20));
-		txtID.setBounds(207, 56, 392, 37);
-		contentPane.add(txtID);
-		txtID.setColumns(10);
 		
 		txtJenis = new JTextField();
 		txtJenis.setFont(new Font("Tempus Sans ITC", Font.PLAIN, 20));
@@ -119,7 +111,6 @@ public class ServiceFrame<srvc> extends JFrame {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					Service service = new Service();
-					service.setId(txtID.getText());
 					service.setJenis(txtJenis.getText());
 					service.setHarga(txtHarga.getText());
 					service.setStatus(txtStatus.getText());
@@ -133,26 +124,6 @@ public class ServiceFrame<srvc> extends JFrame {
 		btnSave.setBackground(Color.GREEN);
 		btnSave.setBounds(63, 254, 126, 39);
 		contentPane.add(btnSave);
-		
-		JButton btnUpdate = new JButton("Update");
-		btnUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Service service = new Service();
-		    	service.setId(txtID.getText());
-		    	service.setJenis(txtJenis.getText());
-		    	service.setHarga(txtHarga.getText());
-		    	service.setStatus(txtStatus.getText());
-		    	service.setId(id);
-		    	srvc.update(service);
-		    	reset();
-		    	loadTable();
-			}
-		});
-		btnUpdate.setForeground(Color.BLACK);
-		btnUpdate.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		btnUpdate.setBackground(Color.GRAY);
-		btnUpdate.setBounds(215, 254, 126, 39);
-		contentPane.add(btnUpdate);
 		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
@@ -175,6 +146,9 @@ public class ServiceFrame<srvc> extends JFrame {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				MainFrame Frame = new MainFrame();
+				Frame.setVisible(true);
+				dispose();
 			}
 		});
 		btnCancel.setForeground(Color.BLACK);
@@ -183,19 +157,49 @@ public class ServiceFrame<srvc> extends JFrame {
 		btnCancel.setBounds(522, 254, 126, 39);
 		contentPane.add(btnCancel);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(10, 308, 666, 233);
+		contentPane.add(scrollPane);
+		
 		tableService = new JTable();
+		scrollPane.setViewportView(tableService);
+		tableService.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"ID", "JENIS", "HARGA", "STATUS"
+			}
+		));
 		tableService.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				 id = tableService.getValueAt(tableService.getSelectedRow(), 1).toString();
-	                txtJenis.setText(tableService.getValueAt(tableService.getSelectedRow(), 2).toString()); 
-	                txtHarga.setText(tableService.getValueAt(tableService.getSelectedRow(), 3).toString()); 
-	                txtStatus.setText(tableService.getValueAt(tableService.getSelectedRow(), 4).toString()); 
+				 id = tableService.getValueAt(tableService.getSelectedRow(), 0).toString();
+	                txtJenis.setText(tableService.getValueAt(tableService.getSelectedRow(), 1).toString()); 
+	                txtHarga.setText(tableService.getValueAt(tableService.getSelectedRow(), 2).toString()); 
+	                txtStatus.setText(tableService.getValueAt(tableService.getSelectedRow(), 3).toString()); 
 			}
 		});
 		tableService.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		tableService.setBounds(10, 308, 666, 233);
-		contentPane.add(tableService);
+		
+		JButton btnUpdate = new JButton("Update");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Service service = new Service();
+		    	service.setJenis(txtJenis.getText());
+		    	service.setHarga(txtHarga.getText());
+		    	service.setStatus(txtStatus.getText());
+		    	service.setId(id);
+		    	srvc.update(service);
+		    	reset();
+		    	loadTable();
+			}
+		});
+		btnUpdate.setForeground(Color.BLACK);
+		btnUpdate.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		btnUpdate.setBackground(Color.GRAY);
+		btnUpdate.setBounds(215, 254, 126, 39);
+		contentPane.add(btnUpdate);
 	}
 
 	ServiceRepo srvc = new ServiceRepo();
@@ -210,7 +214,6 @@ public class ServiceFrame<srvc> extends JFrame {
 	}
 
 	protected void reset() {
-		txtID.setText("");
 		txtJenis.setText("");
 		txtHarga.setText("");
 		txtStatus.setText("");		

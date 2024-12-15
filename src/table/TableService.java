@@ -10,6 +10,7 @@ public class TableService extends AbstractTableModel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static int getSelectedRow;
 	List<Service> ls;
 	private String[] columnNames = {"Id", "jenis", "harga", "status"};
 	public TableService(List<Service> ls) {
